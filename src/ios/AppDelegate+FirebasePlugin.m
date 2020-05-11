@@ -22,8 +22,6 @@ static AppDelegate* instance;
 }
 
 static NSDictionary* mutableUserInfo;
-// static FIRAuthStateDidChangeListenerHandle authStateChangeListener;
-static bool authStateChangeListenerInitialized = false;
 
 - (void)setDelegate:(id)delegate {
     objc_setAssociatedObject(self, kDelegateKey, delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
