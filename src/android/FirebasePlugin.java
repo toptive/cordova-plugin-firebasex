@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.NotificationChannel;
 import android.content.ContentResolver;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.media.AudioAttributes;
@@ -14,19 +12,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.util.Base64;
 import android.util.Log;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -43,27 +32,20 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 
-
-import com.google.gson.Gson;
-
 public class FirebasePlugin extends CordovaPlugin {
 
     protected static FirebasePlugin instance = null;
-    private Gson gson;
     private static CordovaInterface cordovaInterface = null;
     protected static Context applicationContext = null;
     private static Activity cordovaActivity = null;
 
     protected static final String TAG = "FirebasePlugin";
-    protected static final String JS_GLOBAL_NAMESPACE = "FirebasePlugin.";
     protected static final String KEY = "badge";
-    protected static final String SETTINGS_NAME = "settings";
 
     private static boolean inBackground = true;
     private static ArrayList<Bundle> notificationStack = null;
     private static CallbackContext notificationCallbackContext;
     private static CallbackContext tokenRefreshCallbackContext;
-    private static CallbackContext activityResultCallbackContext;
 
     private static NotificationChannel defaultNotificationChannel = null;
     public static String defaultChannelId = null;
@@ -82,8 +64,6 @@ public class FirebasePlugin extends CordovaPlugin {
                     Log.d(TAG, "Starting Firebase plugin");
 
                     FirebaseApp.initializeApp(applicationContext);
-
-                    gson = new Gson();
 
                     if (extras != null && extras.size() > 1) {
                         if (FirebasePlugin.notificationStack == null) {
@@ -185,7 +165,6 @@ public class FirebasePlugin extends CordovaPlugin {
     public void onReset() {
         FirebasePlugin.notificationCallbackContext = null;
         FirebasePlugin.tokenRefreshCallbackContext = null;
-        FirebasePlugin.activityResultCallbackContext = null;
     }
 
     @Override
