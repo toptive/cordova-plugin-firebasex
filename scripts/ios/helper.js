@@ -188,39 +188,6 @@ module.exports = {
             googlePlistModified = false,
             appPlistModified = false;
 
-        if(typeof pluginVariables['FIREBASE_ANALYTICS_COLLECTION_ENABLED'] !== 'undefined'){
-            googlePlist["FIREBASE_ANALYTICS_COLLECTION_ENABLED"] = (pluginVariables['FIREBASE_ANALYTICS_COLLECTION_ENABLED'] !== "false" ? "true" : "false") ;
-            googlePlistModified = true;
-        }
-        if(typeof pluginVariables['FIREBASE_PERFORMANCE_COLLECTION_ENABLED'] !== 'undefined'){
-            googlePlist["FIREBASE_PERFORMANCE_COLLECTION_ENABLED"] = (pluginVariables['FIREBASE_PERFORMANCE_COLLECTION_ENABLED'] !== "false" ? "true" : "false") ;
-            googlePlistModified = true;
-        }
-        if(typeof pluginVariables['FIREBASE_CRASHLYTICS_COLLECTION_ENABLED'] !== 'undefined'){
-            googlePlist["FIREBASE_CRASHLYTICS_COLLECTION_ENABLED"] = (pluginVariables['FIREBASE_CRASHLYTICS_COLLECTION_ENABLED'] !== "false" ? "true" : "false") ;
-            googlePlistModified = true;
-        }
-        if(pluginVariables['SETUP_RECAPTCHA_VERIFICATION'] === 'true'){
-            var reversedClientId = googlePlist['REVERSED_CLIENT_ID'];
-
-            if(!appPlist['CFBundleURLTypes']) appPlist['CFBundleURLTypes'] = [];
-            var entry, i;
-            for(i=0; i<appPlist['CFBundleURLTypes'].length; i++){
-                if(typeof appPlist['CFBundleURLTypes'][i] === 'object' && appPlist['CFBundleURLTypes'][i]['CFBundleURLSchemes']){
-                    entry = appPlist['CFBundleURLTypes'][i];
-                    break;
-                }
-            }
-            if(!entry) entry = {};
-            if(!entry['CFBundleTypeRole']) entry['CFBundleTypeRole'] = 'Editor';
-            if(!entry['CFBundleURLSchemes']) entry['CFBundleURLSchemes'] = [];
-            if(entry['CFBundleURLSchemes'].indexOf(reversedClientId) === -1){
-                entry['CFBundleURLSchemes'].push(reversedClientId)
-            }
-            appPlist['CFBundleURLTypes'][i] = entry;
-            appPlistModified = true;
-        }
-
         if(googlePlistModified) fs.writeFileSync(path.resolve(googlePlistPath), plist.build(googlePlist));
         if(appPlistModified) fs.writeFileSync(path.resolve(appPlistPath), plist.build(appPlist));
     }
