@@ -155,6 +155,5 @@ module.exports = function (context) {
         if(pluginVariables['IOS_STRIP_DEBUG'] && pluginVariables['IOS_STRIP_DEBUG'] === 'true'){
             helper.stripDebugSymbols();
         }
-        helper.applyPluginVarsToPlists(PLATFORM.IOS.dest, PLATFORM.IOS.appPlist, pluginVariables);
     }
 };
