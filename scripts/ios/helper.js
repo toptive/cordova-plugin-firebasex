@@ -2,13 +2,6 @@ var fs = require("fs");
 var path = require("path");
 var utilities = require("../lib/utilities");
 var xcode = require("xcode");
-var plist = require('plist');
-
-/**
- * This is used as the display text for the build phase block in XCode as well as the
- * inline comments inside of the .pbxproj file for the build script phase block.
- */
-var comment = "\"Crashlytics\"";
 
 module.exports = {
 
