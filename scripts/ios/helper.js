@@ -33,7 +33,7 @@ module.exports = {
         xcodeProject.parseSync();
 
         // Build the body of the script to be executed during the build phase.
-        var script = "''"; // nothing to execute for now
+        var script = '"' + '' + '"';; // nothing to execute for now
 
         // Generate a unique ID for our new build phase.
         var id = xcodeProject.generateUuid();
