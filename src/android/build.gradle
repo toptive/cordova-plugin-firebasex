@@ -1,11 +1,8 @@
 buildscript {
     repositories {
         google()
-        maven {
-            url "https://maven.fabric.io/public"
-        }
-        mavenCentral()
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.+'
@@ -19,19 +16,15 @@ repositories {
     }
 }
 
-cdvPluginPostBuildExtras.add({
-    rootProject.subprojects {
-        if (name == "app") {
-            if (!plugins.hasPlugin('com.google.gms.google-services')) {
-                apply {
-                    plugin com.google.gms.googleservices.GoogleServicesPlugin
-                }
-
-                // Disable strict version check as it causes problems
-                com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
-            }
-        }
+// use postBuildExtras to make sure the plugin is applied after
+// cdvPluginPostBuildExtras. Therefore if googleServices is added
+// to cdvPluginPostBuildExtras somewhere else, the plugin execution
+// will be skipped and project build will be successfull
+ext.postBuildExtras = {
+    if (project.extensions.findByName('googleServices') == null) {
+        // apply plugin: 'com.google.gms.google-services'
+        // class must be used instead of id(string) to be able to apply plugin from non-root gradle file
+        apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
     }
-})
-
+}
 
