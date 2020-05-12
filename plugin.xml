@@ -59,6 +59,8 @@
 	</platform>
 
 	<platform name="ios">
+		<hook type="after_plugin_install" src="scripts/ios/after_plugin_install.js" />
+		<hook type="before_plugin_uninstall" src="scripts/ios/before_plugin_uninstall.js" />
 
 		<js-module name="FirebasePlugin" src="www/firebase.js">
 			<clobbers target="FirebasePlugin" />
@@ -80,6 +82,8 @@
 				<string>remote-notification</string>
 			</array>
 		</config-file>
+
+		<resource-file src="src/ios/GoogleService-Info.plist" />
 
 		<header-file src="src/ios/AppDelegate+FirebasePlugin.h" />
 		<source-file src="src/ios/AppDelegate+FirebasePlugin.m" />

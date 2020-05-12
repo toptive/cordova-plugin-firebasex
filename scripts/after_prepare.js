@@ -146,7 +146,7 @@ module.exports = function (context) {
 
     if (platforms.indexOf('ios') !== -1 && Utilities.directoryExists(IOS_DIR)){
         Utilities.log('Preparing Firebase on iOS');
-        // Utilities.copyKey(PLATFORM.IOS);
+        Utilities.copyKey(PLATFORM.IOS);
 
         var helper = require("./ios/helper");
         var xcodeProjectPath = helper.getXcodeProjectPath();
@@ -155,5 +155,6 @@ module.exports = function (context) {
         if(pluginVariables['IOS_STRIP_DEBUG'] && pluginVariables['IOS_STRIP_DEBUG'] === 'true'){
             helper.stripDebugSymbols();
         }
+        helper.applyPluginVarsToPlists(PLATFORM.IOS.dest, PLATFORM.IOS.appPlist, pluginVariables);
     }
 };
