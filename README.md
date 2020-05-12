@@ -113,33 +113,15 @@ cordova plugin add cordova-plugin-firebasex
 The following Cordova plugin variables are supported by the plugin.
 Note that these must be set at plugin installation time. If you wish to change plugin variables, you'll need to uninstall the plugin and reinstall it with the new variable values.
 
-### Android & iOS
-- `FIREBASE_ANALYTICS_COLLECTION_ENABLED` - whether to automatically enable Firebase Analytics data collection on app startup
-- `FIREBASE_PERFORMANCE_COLLECTION_ENABLED` - whether to automatically enable Firebase Performance data collection on app startup
-- `FIREBASE_CRASHLYTICS_COLLECTION_ENABLED` - whether to automatically enable Firebase Crashlytics data collection on app startup
-See [Disable data collection on startup](#disable-data-collection-on-startup) for more info.
-
 ### Android only
 The following plugin variables are used to specify the Firebase SDK versions as Gradle dependencies on Android:
-- `ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION`
-- `ANDROID_PLAY_SERVICES_AUTH_VERSION`
-- `ANDROID_FIREBASE_ANALYTICS_VERSION`
 - `ANDROID_FIREBASE_MESSAGING_VERSION`
-- `ANDROID_FIREBASE_CONFIG_VERSION`
-- `ANDROID_FIREBASE_PERF_VERSION`
-- `ANDROID_FIREBASE_AUTH_VERSION`
-- `$ANDROID_FIREBASE_INAPPMESSAGING_VERSION`
-- `ANDROID_FIREBASE_FIRESTORE_VERSION`
-- `ANDROID_CRASHLYTICS_VERSION`
-- `ANDROID_CRASHLYTICS_NDK_VERSION`
-- `ANDROID_GSON_VERSION`
 See [Specifying Android library versions](#specifying-android-library-versions) for more info.
 
 - `ANDROID_ICON_ACCENT` - sets the default accent color for system notifications. See [Android Notification Color](#android-notification-color) for more info.
 
 ### iOS only
 - `IOS_STRIP_DEBUG` - prevents symbolification of all libraries included via Cocoapods. See [Strip debug symbols](#strip-debug-symbols) for more info.
-- `SETUP_RECAPTCHA_VERIFICATION` - automatically sets up reCAPTCHA verification for phone authentication on iOS. See [verifyPhoneNumber](#verifyphonenumber) for more info.
 
 ## Supported Cordova Versions
 - cordova: `>= 9`
@@ -285,31 +267,12 @@ Or you can specify them as plugin variables in your `config.xml`, for example:
 
 The following plugin variables are used to specify the following Gradle dependency versions on Android:
 
-- `ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION` => `com.google.android.gms:play-services-tagmanager`
-- `ANDROID_PLAY_SERVICES_AUTH_VERSION` => `com.google.android.gms:play-services-auth`
-- `ANDROID_FIREBASE_ANALYTICS_VERSION` => `com.google.firebase:firebase-analytics`
 - `ANDROID_FIREBASE_MESSAGING_VERSION` => `com.google.firebase:firebase-messaging`
-- `ANDROID_FIREBASE_CONFIG_VERSION` => `com.google.firebase:firebase-config`
-- `ANDROID_FIREBASE_PERF_VERSION` => `com.google.firebase:firebase-perf`
-- `ANDROID_FIREBASE_AUTH_VERSION` => `com.google.firebase:firebase-auth`
-- `ANDROID_FIREBASE_FIRESTORE_VERSION` => `com.google.firebase:firebase-firestore`
-- `$ANDROID_FIREBASE_INAPPMESSAGING_VERSION` => `com.google.firebase:firebase-inappmessaging-display`
-- `ANDROID_CRASHLYTICS_VERSION` => `com.crashlytics.sdk.android:crashlytics`
-- `ANDROID_CRASHLYTICS_NDK_VERSION` => `com.crashlytics.sdk.android:crashlytics-ndk`
-- `ANDROID_GSON_VERSION` => `com.google.code.gson:gson`
 
 For example:
 
     cordova plugin add cordova-plugin-firebasex \
-        --variable ANDROID_PLAY_SERVICES_TAGMANAGER_VERSION=17.0.0 \
-        --variable ANDROID_PLAY_SERVICES_AUTH_VERSION=17.0.0 \
-        --variable ANDROID_FIREBASE_ANALYTICS_VERSION=17.0.0 \
         --variable ANDROID_FIREBASE_MESSAGING_VERSION=19.0.0 \
-        --variable ANDROID_FIREBASE_CONFIG_VERSION=18.0.0 \
-        --variable ANDROID_FIREBASE_PERF_VERSION=18.0.0 \
-        --variable ANDROID_FIREBASE_AUTH_VERSION=18.0.0 \
-        --variable ANDROID_CRASHLYTICS_VERSION=2.10.1 \
-        --variable ANDROID_CRASHLYTICS_NDK_VERSION=2.1.0 \
 
 ### AndroidX
 This plugin has been migrated to use [AndroidX (Jetpack)](https://developer.android.com/jetpack/androidx/migrate) which is the successor to the [Android Support Library](https://developer.android.com/topic/libraries/support-library/index).
@@ -371,13 +334,6 @@ By default this preference is set to `false`.
 
 Note: if you enable this setting, any crashes that occur within libraries included via Cocopods will not be recorded in Crashlytics or other crash reporting services.
 
-### Cordova CLI builds
-If you are building (directly or indirectly) via the Cordova CLI and encounter build failures on iOS, this is likely due to [an issue with Cordova CLI builds for iOS](https://github.com/apache/cordova-ios/issues/659) when including certain pods into the build (see [#326](https://github.com/dpa99c/cordova-plugin-firebasex/issues/326)).
-
-Note that building from Xcode works fine, so if you are able then do this.
-
-Otherwise (e.g. if building via a CI) then you'll need to switch to using the [cli_build branch](https://github.com/dpa99c/cordova-plugin-firebasex/tree/cli_build) of this plugin which removes the Firebase Inapp Messaging and Google Tag Manager SDK components that are causing the build issues.
-
 # Firebase config setup
 There's a handy [installation and setup guide on medium.com](https://medium.com/@felipepucinelli/how-to-add-push-notifications-in-your-cordova-application-using-firebase-69fac067e821).
 However, if using this, remember this forked plugin is `cordova-plugin-firebasex` (not `cordova-plugin-firebase`).
@@ -396,33 +352,6 @@ Check out this [firebase article](https://support.google.com/firebase/answer/701
     ...
 ```
 IMPORTANT: The Firebase SDK requires the configuration files to be present and valid, otherwise your app will crash on boot or Firebase features won't work.
-
-# Disable data collection on startup
-By default, analytics, performance and Crashlytics data will begin being collected as soon as the app starts up.
-However, for data protection or privacy reasons, you may wish to disable data collection until such time as the user has granted their permission.
-
-To do this, set the following plugin variables to `false` at plugin install time:
-
-* `FIREBASE_ANALYTICS_COLLECTION_ENABLED`
-* `FIREBASE_PERFORMANCE_COLLECTION_ENABLED`
-* `FIREBASE_CRASHLYTICS_COLLECTION_ENABLED`
-
-
-    cordova plugin add cordova-plugin-firebasex \
-        --variable FIREBASE_ANALYTICS_COLLECTION_ENABLED=false \
-        --variable FIREBASE_PERFORMANCE_COLLECTION_ENABLED=false \
-        --variable FIREBASE_CRASHLYTICS_COLLECTION_ENABLED=false
-
-This will disable data collection (on both Android & iOS) until you call [setAnalyticsCollectionEnabled](#setanalyticscollectionenabled), [setPerformanceCollectionEnabled](#setperformancecollectionenabled) and [setCrashlyticsCollectionEnabled](#setcrashlyticscollectionenabled):
-
-       FirebasePlugin.setAnalyticsCollectionEnabled(true);
-       FirebasePlugin.setPerformanceCollectionEnabled(true);
-       FirebasePlugin.setCrashlyticsCollectionEnabled(true);
-
-Notes:
-- Calling `setXCollectionEnabled()` will have no effect if the corresponding `FIREBASE_X_COLLECTION_ENABLED` variable is set to `true`.
-- Calling `setAnalyticsCollectionEnabled(true|false)` or `setPerformanceCollectionEnabled(true|false)` will enable/disable data collection during the current app session and across subsequent app sessions until such time as the same method is called again with a different value.
-- Calling `setCrashlyticsCollectionEnabled(true|false)` will enable/disable data collection during subsequent app sessions until such time as the same method is called again with a different value. It **does not** affect the current app session.
 
 # Example project
 An example project repo exists to demonstrate and validate the functionality of this plugin:
